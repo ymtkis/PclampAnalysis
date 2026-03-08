@@ -3,7 +3,7 @@ protocol:
   mepsc: "mEPSC"
 
 paths:
-  base_path: "/base_path/"
+  base_path: "/example/"
   data_root: "Data"
   experiment_file: "Experiment.xlsx"
   prefix: "Strain"
