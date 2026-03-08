@@ -1,0 +1,123 @@
+protocol:
+  ic_step: "ICstep"
+  mepsc: "mEPSC"
+
+paths:
+  base_path: "/base_path/"
+  data_root: "Data"
+  experiment_file: "Experiment.xlsx"
+  prefix: "Strain"
+
+results:
+  results_subdir: "Results"
+  event_annotation_subdir: "Event_annotation"
+  cnn_annotation_subdir: "cnn_annotations"
+  cnn_dataset_subdir: "cnn_dataset"
+  cnn_model_subdir: "cnn_models"
+  cnn_detection_subdir: "cnn_detections"
+
+filter:
+  notch_max_harmonic: 1
+  notch_Q: 30
+  lowpass_hz: 500
+  lowpass_order: 4
+
+annotation:
+  window_sec: 0.5
+  y_range: 50
+
+cnn:
+  window_sec: 0.025
+  step_sec: 0.001
+
+  valid_start_sec: 0.4
+  valid_end_sec: 10.4
+
+  center_on: "start"
+  neg_pos_ratio: 2.0
+  edge_margin_sec: 0.02
+
+  proba_thresh: 0.80
+
+  training:
+    batch_size: 64
+    n_epochs: 50
+    patience: 7
+    learning_rate: 0.001
+    weight_decay: 1e-5
+
+cnn_postprocess:
+  # peak detection
+  min_gap_between_events: 0.005  
+  min_peak_ampl_pA: 4.0               
+
+  # SNR 
+  snr_factor: 3.0                     
+  local_sd_win_sec: 0.1              
+
+  # baseline 
+  baseline_before_sec: 0.005
+  baseline_win_sec: 0.005
+
+  highpass_hz: 4.0
+  highpass_order: 2
+
+conditions:
+  - "cond1"
+  - "cond2"
+
+plot:
+  colors:
+    "cond1": "dimgray"
+    "cond2": "deepskyblue"
+
+  sets:
+    "comparison1": 
+      - "cond1"
+      - "cond2"
+      
+  metrics:
+      - "Peak amplitude"
+      - "Peak amplitude from onset"
+      - "Half duration"
+      - "Rise slope"
+      - "Fall slope"
+      
+analysis:
+  replicates: ["1", "2", "3"]
+  i_command_start: -100
+  i_command_end: 200
+  i_command_step: 20
+
+icstep:
+  step_start_s: 0.18
+  step_duration_s: 1.0
+
+  detect:
+    lowcut_hz: 0.1
+    highcut_hz: 1000.0
+    baseline_lowcut_hz: 2000.0
+    baseline_highcut_hz: 4000.0
+    spike_height: 40
+
+  annotation:
+    window_padding_s: 0.05
+
+input_resistance:
+  baseline_start_s: 2.20
+  baseline_end_s: 3.00
+  holding_start_s: 0.20
+  holding_end_s: 1.00
+  max_holding_dev_mV: 3.0
+  min_ri_mohm: 70.0
+
+event:
+  sweep_duration: 10.0
+
+scaling:
+  enabled: true
+  n_perm: 2000
+  seed: 0
+  metric: "ks"
+  pairs: "all_pairs"
+  min_events_per_cell: 30
